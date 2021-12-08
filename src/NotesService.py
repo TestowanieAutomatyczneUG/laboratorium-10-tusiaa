@@ -12,6 +12,8 @@ class NotesService:
         self.notes.clear()
 
     def averageOf(self, name):
+        if not name or type(name) != str:
+            raise ValueError("Invalid name")
         notes = self.notes.getAllNotesOf(name)
         value = 0
         for note in notes:

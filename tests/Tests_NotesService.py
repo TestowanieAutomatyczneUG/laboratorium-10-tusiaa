@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import *
+from parameterized import parameterized
 from src.Note import *
 from src.NotesService import *
 
@@ -30,6 +31,21 @@ class TestNoteService(unittest.TestCase):
     def test_clear(self, mock_method):
         self.test_object.clear()
         mock_method.assert_called_once_with()
+
+    @parameterized.expand([
+        ("", ValueError),
+        (5, ValueError),
+        (5.5, ValueError),
+        (True, ValueError),
+        (None, ValueError),
+        ([1,2,3], ValueError),
+        ({'name': 2, 'grades': 4}, ValueError),
+    ])
+    @patch.object(NotesStorage, 'getAllNotesOf')
+    def test_averageOf_wrong_name(self, name, expected_exception, mock_method):
+        mock_method.return_value = [Note("note", 3), Note("note", 4), Note("note", 5)]
+        with self.assertRaises(expected_exception):
+            self.test_object.averageOf(name)
 
     def tearDown(self):
         del self.test_object
