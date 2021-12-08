@@ -47,5 +47,20 @@ class TestNoteService(unittest.TestCase):
         with self.assertRaises(expected_exception):
             self.test_object.averageOf(name)
 
+    @parameterized.expand([
+        ("note", ValueError),
+        ("", ValueError),
+        (5, ValueError),
+        (5.5, ValueError),
+        (True, ValueError),
+        (None, ValueError),
+        ([1,2,3], ValueError),
+        ({'name': 2, 'grades': 4}, ValueError),
+    ])
+    @patch.object(NotesStorage, 'add')
+    def test_add_wrong_note(self, name, expected_exception, mock_method):
+        with self.assertRaises(expected_exception):
+            self.test_object.add(name)
+
     def tearDown(self):
         del self.test_object

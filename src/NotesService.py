@@ -1,4 +1,5 @@
 from src.NotesStorage import *
+from src.Note import *
 
 class NotesService:
 
@@ -6,6 +7,8 @@ class NotesService:
         self.notes = NotesStorage()
 
     def add(self, note):
+        if type(note) != Note:
+            raise ValueError("Invalid note")
         self.notes.add(note)
 
     def clear(self):
